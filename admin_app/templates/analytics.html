@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analytics</title>
+    <link rel="stylesheet" href="{% static 'css/adminNav.css' %}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <main>
+      <section class="glass">
+        <nav class="navbar">
+          <div class="user">
+            <img class="ava" src="{% static 'images/icons/0-UserPic.png' %}" width="150"alt=""/>
+            <h3>User Name</h3>
+          </div>
+          <div class="links">
+            <a href=""><div class="link">
+                <img class="icons" src="{% static 'images/icons/1-Profile.png' %}" alt="profile"/>
+                <h2>------</h2>
+              </div>
+            </a>
+            <a href="">
+              <div class="link">
+                <img class="icons" src="{% static 'images/icons/2-Explore.png' %}" width="50" alt="Explore"/>
+                <h2>------</h2>
+              </div>
+            </a>
+            <a href="">
+              <div class="link">
+                <img class="icons" src="{% static 'images/icons/3-myTrip.png' %}" height="50" alt="My Trip"/>
+                <h2>------</h2>
+              </div>
+            </a>
+            <a href="/admin_app/analytics"><div class="link">
+                <img class="icons" src="{% static 'images/icons/analytics.png' %}" height="50" alt="Fav"/>
+                <h2>Analytics</h2>
+              </div>
+              </a>
+            <a href="/admin_app/monitor">
+              <div class="link">
+                <img class="icons" src="{% static 'images/icons/users.png' %}" height="50" alt="Map"/>
+                <h2>Monitor Users</h2>
+              </div>
+              </a>
+          </div>
+          <div class="utls">
+            <a href="">
+              <div class="utl">
+                <img class="icons" src="{% static 'images/icons/9-settings.png' %}" height="50" alt="settings"/>
+                <h2>Settings</h2>
+              </div>
+              </a>
+            <form action="/logout/" method="post">
+              {% csrf_token %}
+                <button class="utl">
+                    <img class="icons" src="{% static 'images/icons/10-logOut.png' %}" height="50" alt="Log out"/>
+                    <h2>Log Out</h2>
+                </button>
+            </form>
+          </div>
+        </nav>
+        <!-- here is the rest of the DB -->
+        <div class="dashbord">
+          <div class="dash1">
+            <div class="db1">
+              <canvas id="userActivity"> </canvas>
+            </div>
+            <div class="db2">
+              <canvas id="featureUsage"> </canvas>
+            </div>
+          </div>
+          <div class="dash2">
+            <div class="db3">
+              <canvas id="engagementType"> </canvas>
+              <canvas id="genderCount"> </canvas>
+            </div>
+            <div class="db4" id="boxes">
+              <div class="stat-box">
+                Highest Active Users<span>0000</span>
+              </div>
+              <div class="stat-box">
+                Total Accounts<span>0000</span>
+              </div>
+              <div class="stat-box">
+                Most Used Feature<span>Map</span>
+              </div>
+              <div class="stat-box">
+                Total Itineraries<span>0000</span>
+              </div>
+              <div class="stat-box">
+                Avg Itineraries/User<span>0000</span>
+              </div>
+              <div class="stat-box">
+                Avg Journey Duration<span>00 Days</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div class="circle1"></div>
+    <div class="circle2"></div>
+    <script>
+      const activity_dates = {{ activity_dates | safe }};
+      const activity_counts = {{ activity_counts | safe }};
+      /**
+      const feature_name = {{ feature_name | safe }};
+      const feature_usage = {{ feature_usage | safe }};
+      const female_count = {{ female_count | safe }};
+      const male_count = {{ male_count | safe }};
+      const follow_count = {{ follow_count | safe }};
+      const comment_count = {{ comment_count | safe }};
+      const like_count = {{ like_count | safe }};
+      */
+    </script>
+    <script src="{% static 'js/analytics.js' %}"></script>
+  </body>
+</html>

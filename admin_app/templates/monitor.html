@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monitor Users</title>
+    <link rel="stylesheet" href="{% static 'css/adminNav.css' %}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <main>
+      <section class="glass">
+        <nav class="navbar">
+          <div class="user">
+            <img
+              class="ava"
+              src="{% static 'images/icons/0-UserPic.png' %}"
+              width="150"
+              alt=""
+            />
+            <h3>User Name</h3>
+          </div>
+          <div class="links">
+            <a href=""
+              ><div class="link">
+                <img
+                  class="icons"
+                  src="{% static 'images/icons/1-Profile.png' %}"
+                  alt="profile"
+                />
+                <h2>------</h2>
+              </div>
+            </a>
+            <a href="">
+              <div class="link">
+                <img
+                  class="icons"
+                  src="{% static 'images/icons/2-Explore.png' %}"
+                  width="50"
+                  alt="Explore"
+                />
+                <h2>------</h2>
+              </div>
+            </a>
+            <a href="">
+              <div class="link">
+                <img
+                  class="icons"
+                  src="{% static 'images/icons/3-myTrip.png' %}"
+                  height="50"
+                  alt="My Trip"
+                />
+                <h2>------</h2>
+              </div>
+            </a>
+            <a href="/admin_app/analytics"
+              ><div class="link">
+                <img
+                  class="icons"
+                  src="{% static 'images/icons/analytics.png' %}"
+                  height="50"
+                  alt="Fav"
+                />
+                <h2>Analytics</h2>
+              </div>
+            </a>
+            <a href="/admin_app/monitor">
+              <div class="link">
+                <img
+                  class="icons"
+                  src="{% static 'images/icons/users.png' %}"
+                  height="50"
+                  alt="Map"
+                />
+                <h2>Monitor Users</h2>
+              </div>
+            </a>
+          </div>
+          <div class="utls">
+            <a href="">
+              <div class="utl">
+                <img
+                  class="icons"
+                  src="{% static 'images/icons/9-settings.png' %}"
+                  height="50"
+                  alt="settings"
+                />
+                <h2>Settings</h2>
+              </div>
+            </a>
+            <form action="/logout/" method="post">
+              {% csrf_token %}
+              <button class="utl">
+                <img
+                  class="icons"
+                  src="{% static 'images/icons/10-logOut.png' %}"
+                  height="50"
+                  alt="Log out"
+                />
+                <h2>Log Out</h2>
+              </button>
+            </form>
+          </div>
+        </nav>
+        <!-- here is the rest of the DB -->
+        <div class="dashbord">
+          <div class="dash1">
+            <div class="db1">
+              <div class="header">
+                <h1>Users Table</h1>
+                <button>Filter</button>
+              </div>
+              <div id="table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Username</th>
+                      <th>Email Address</th>
+                      <th>Staff Status</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                    <tr>
+                      <td>placeholder</td>
+                      <td>placeholder@gmail.com</td>
+                      <td>X</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="dash2">
+            <div class="db3" id="general">
+              <div id="top">
+                <h1>General User Details</h1>
+                <p id="status">Account status: Active</p>
+              </div>
+              <div id="mid">
+                <img
+                  class="ava"
+                  src="{% static 'images/icons/0-UserPic.png' %}"
+                  width="150"
+                  alt=""
+                />
+                <div id="general_details">
+                  <p>Name: placeholder</p>
+                  <p>Email: placeholder@gmail.com</p>
+                  <p>Staff Status: X</p>
+                </div>
+              </div>
+              <div id="bottom">
+                <button>Edit account details</button>
+                <button>Reset password</button>
+                <button>Disable account</button>
+                <button>Delete account</button>
+              </div>
+            </div>
+            <div class="db4" id="table">
+              <table >
+                <thead>
+                  <tr>
+                    <th colspan="2">User Specific Details</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>Creation date</td>
+                    <td>00/00/0000</td>
+                  </tr>
+                  <tr>
+                    <td>Last active</td>
+                    <td>00/00/0000</td>
+                  </tr>
+                  <tr>
+                    <td>Itineraries</td>
+                    <td>0000</td>
+                  </tr>
+                  <tr>
+                    <td>Following</td>
+                    <td>0000</td>
+                  </tr>
+                  <tr>
+                    <td>Followers</td>
+                    <td>0000</td>
+                  </tr>
+                  <tr>
+                    <td>Comments</td>
+                    <td>0000</td>
+                  </tr>
+                  <tr>
+                    <td>Likes</td>
+                    <td>0000</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div class="circle1"></div>
+    <div class="circle2"></div>
+  </body>
+</html>
