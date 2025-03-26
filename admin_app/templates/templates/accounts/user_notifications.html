@@ -1,0 +1,66 @@
+{% extends "templates/accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title text-center">الإشعارات
+                        <span class="badge bg-primary rounded-pill">{{ unread_count }}</span>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if notifications %}
+                        <div class="list-group notification-list">
+                            {% for notification in notifications %}
+                            <div class="list-group-item list-group-item-action {% if not notification.is_read %}unread{% endif %}">
+                                <div class="d-flex w-100 justify-content-between align-items-center">
+                                    <h5 class="mb-1">
+                                        {% if notification.notification_type == 'system' %}
+                                            <i class="fas fa-bell me-2 text-primary"></i> إشعار نظام
+                                        {% else %}
+                                            <i class="fas fa-plane me-2 text-success"></i> تذكير رحلة
+                                        {% endif %}
+                                    </h5>
+                                    <small class="text-muted">{{ notification.notification_date|date:"Y-m-d H:i" }}</small>
+                                </div>
+                                <p class="mb-1">{{ notification.message }}</p>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    {% if not notification.is_read %}
+                                    <a href="{% url 'mark_notification_read' notification.pk %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-check"></i> تحديد كمقروء
+                                    </a>
+                                    {% else %}
+                                    <small class="text-muted"><i class="fas fa-check-double"></i> مقروء</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-bell-slash fa-4x text-muted mb-3"></i>
+                            <h5>لا توجد إشعارات</h5>
+                            <p class="text-muted">ستظهر هنا الإشعارات والتذكيرات الخاصة برحلاتك</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .notification-list .unread {
+        border-left: 3px solid #007bff;
+        background-color: rgba(13, 110, 253, 0.05);
+    }
+    
+    .notification-list .list-group-item {
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}

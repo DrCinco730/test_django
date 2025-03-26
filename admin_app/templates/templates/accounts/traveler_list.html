@@ -1,0 +1,108 @@
+{% extends "templates/accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Manage Travelers</h2>
+        <div>
+            <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#filterModal">
+                <i class="fas fa-filter"></i> Filter
+            </button>
+            <a href="#" class="btn btn-outline-success">
+                <i class="fas fa-file-excel"></i> Export to Excel
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Verification Status</th>
+                            <th>Trip Count</th>
+                            <th>Registration Date</th>
+                            <th>Last Activity</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for traveler in travelers %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {% if traveler.profile_photo %}
+                                        <img src="{{ traveler.profile_photo.url }}" class="rounded-circle me-2" width="40">
+                                    {% else %}
+                                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                            {{ traveler.user.username|make_list|first|upper }}
+                                        </div>
+                                    {% endif %}
+                                    {{ traveler.user.username }}
+                                </div>
+                            </td>
+                            <td>{{ traveler.user.email }}</td>
+                            <td>
+                                {% if traveler.verification %}
+                                    <span class="badge bg-{{ traveler.verification.status|yesno:'success,warning,danger' }}">
+                                        {{ traveler.verification.get_status_display }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Not Verified</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ traveler.trips.count }}</td>
+                            <td>{{ traveler.user.date_joined|date:"Y-m-d" }}</td>
+                            <td>{{ traveler.user.last_login|date:"Y-m-d H:i"|default:"Never logged in" }}</td>
+                            <td>
+                                <a href="{% url 'traveler_detail' traveler.pk %}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No travelers found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Filter Travelers</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="get">
+                    <div class="mb-3">
+                        <label class="form-label">Verification Status</label>
+                        <select name="verification_status" class="form-select">
+                            <option value="">All</option>
+                            <option value="verified">Verified</option>
+                            <option value="pending">Pending</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Registration Date</label>
+                        <input type="date" name="date_joined" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Apply</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

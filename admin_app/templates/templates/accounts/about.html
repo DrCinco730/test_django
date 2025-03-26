@@ -1,0 +1,122 @@
+<!-- templates/accounts/about.html -->
+{% extends 'accounts/header.html' %}
+{% load static %}
+
+{% block title %}About Us - TripCraft{% endblock %}
+
+{% block content %}
+<div class="about-page">
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Crafting Dreams Into Journey</h1>
+            <p class="hero-subtitle">Your travel companion from Saudi Electronic University</p>
+        </div>
+    </div>
+
+    <div class="about-container">
+        <div class="mission-section">
+            <div class="mission-content">
+                <h2>Our Mission</h2>
+                <p>At TripCraft, we're revolutionizing the way people plan and experience travel. Born from the innovative minds of five passionate Saudi Electronic University students, we've created a platform that combines technology with the joy of exploration.</p>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="feature-icon map-icon"></i>
+                <h3>Interactive Planning</h3>
+                <p>Create and customize your perfect itinerary with our intuitive planning tools.</p>
+            </div>
+            <div class="feature-card">
+                <i class="feature-icon community-icon"></i>
+                <h3>Travel Community</h3>
+                <p>Connect with fellow travelers, share experiences, and discover hidden gems.</p>
+            </div>
+            <div class="feature-card">
+                <i class="feature-icon collab-icon"></i>
+                <h3>Group Collaboration</h3>
+                <p>Plan group trips effortlessly with real-time collaboration features.</p>
+            </div>
+        </div>
+
+        <div class="team-section">
+            <h2>The Code Wizards</h2>
+            <p>We're more than just developers - we're travelers who understand your needs. Our diverse team brings together expertise in UX design, software engineering, and travel planning to create the ultimate travel companion.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.about-page {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{% static "images/hero-bg.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    opacity: 0.9;
+}
+
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.mission-section {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.feature-card {
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #4a90e2;
+}
+
+.team-section {
+    text-align: center;
+    padding: 4rem 0;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+</style>
+{% endblock %}

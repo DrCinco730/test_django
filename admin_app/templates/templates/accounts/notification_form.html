@@ -1,0 +1,128 @@
+{% extends "templates/accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>إنشاء إشعار جديد</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="notification_type" class="form-label">نوع الإشعار *</label>
+                            <select class="form-select" id="notification_type" name="notification_type" required>
+                                <option value="system">إشعار نظام</option>
+                                <option value="trip">تذكير رحلة</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                يرجى اختيار نوع الإشعار
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">الرسالة *</label>
+                            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                            <div class="invalid-feedback">
+                                يرجى إدخال رسالة الإشعار
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="notification_date" class="form-label">تاريخ الإشعار</label>
+                            <input type="datetime-local" class="form-control" id="notification_date" name="notification_date">
+                            <small class="text-muted">إذا تركت هذا الحقل فارغاً، سيتم استخدام التاريخ والوقت الحالي</small>
+                        </div>
+
+                        <div class="mb-3 border p-3 rounded">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="recipient_type" id="single_traveler" value="single" checked>
+                                <label class="form-check-label" for="single_traveler">
+                                    إرسال لمسافر محدد
+                                </label>
+                            </div>
+                            
+                            <div class="recipient-single">
+                                <select class="form-select" id="traveler_id" name="traveler_id">
+                                    <option value="">اختر المسافر</option>
+                                    {% for traveler in travelers %}
+                                    <option value="{{ traveler.id }}">{{ traveler.user.username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="form-check mt-3">
+                                <input class="form-check-input" type="radio" name="recipient_type" id="all_travelers" value="all">
+                                <label class="form-check-label" for="all_travelers">
+                                    إرسال لجميع المسافرين
+                                </label>
+                            </div>
+                            
+                            <div class="recipient-all d-none">
+                                <input type="hidden" name="send_to_all" value="1">
+                                <small class="text-muted">سيتم إرسال هذا الإشعار لـ {{ travelers.count }} مسافر</small>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'notification_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> رجوع
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> إرسال
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // التبديل بين خيارات المستلمين
+    document.addEventListener('DOMContentLoaded', function() {
+        const singleTravelerRadio = document.getElementById('single_traveler');
+        const allTravelersRadio = document.getElementById('all_travelers');
+        const recipientSingleDiv = document.querySelector('.recipient-single');
+        const recipientAllDiv = document.querySelector('.recipient-all');
+        const travelerSelect = document.getElementById('traveler_id');
+        
+        singleTravelerRadio.addEventListener('change', function() {
+            if (this.checked) {
+                recipientSingleDiv.classList.remove('d-none');
+                recipientAllDiv.classList.add('d-none');
+                travelerSelect.setAttribute('required', '');
+            }
+        });
+        
+        allTravelersRadio.addEventListener('change', function() {
+            if (this.checked) {
+                recipientSingleDiv.classList.add('d-none');
+                recipientAllDiv.classList.remove('d-none');
+                travelerSelect.removeAttribute('required');
+            }
+        });
+        
+        // Form validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    });
+</script>
+{% endblock %}

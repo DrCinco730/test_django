@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TripCraft{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        /* Modal container styling for both login and logout confirmation modals */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+        }
+        /* Modal content styling */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* Center the modal */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px; /* Fixed width */
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="form-box">
+                <h2>Login</h2>
+                <form method="post" action="{% url 'signin' %}" id="loginForm">
+                    {% csrf_token %}
+                    <input type="text" name="username" placeholder="Username or Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <div class="buttons">
+                        <button type="submit" class="btn">Login</button>
+                    </div>
+                    <a href="{% url 'password_reset' %}">Forgot password?</a>
+                    <div class="signup">
+                        Don't have an account? <a href="{% url 'signup' %}">Sign Up</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutConfirmationModal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to log out?</p>
+            <button id="confirmLogout" class="nav-btn">Yes, Logout</button>
+            <button id="cancelLogout" class="nav-btn">Cancel</button>
+        </div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="{% url 'home' %}" class="logo">TripCraft</a>
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'home' %}" class="nav-btn">Home</a>
+                <a href="{% url 'contact' %}">Contact</a>
+                <a href="{% url 'about' %}">About us</a>
+                {% if user.is_authenticated %}
+                    <div class="user-menu">
+                        <span class="welcome-text">Welcome, {{ user.username }}!</span>
+                        <!-- Logout form -->
+                        <form method="post" action="/user_app/logout/" class="logout-form" id="logoutForm">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-btn logout-btn">Logout</button>
+                        </form>
+                    </div>
+                    <a href="{% url 'category_list' %}" class="nav-btn">Dashboard</a>
+                {% else %}
+                    <a href="#" class="nav-btn" id="loginBtn">Login</a>
+                    <a href="{% url 'signup' %}" class="nav-btn signup-btn">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+    <script>
+        // ==============================
+        // LOGIN MODAL SCRIPT
+        // ==============================
+        var loginModal = document.getElementById("loginModal");
+        var loginBtn = document.getElementById("loginBtn");
+        var loginClose = document.getElementsByClassName("close")[0];
+
+        // Open the login modal when "Login" is clicked
+        if (loginBtn) {
+            loginBtn.onclick = function() {
+                loginModal.style.display = "block";
+            }
+        }
+        // Close the login modal when the close (x) is clicked
+        if (loginClose) {
+            loginClose.onclick = function() {
+                loginModal.style.display = "none";
+            }
+        }
+        // Close the login modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target == loginModal) {
+                loginModal.style.display = "none";
+            }
+        }
+
+        // Handle login form submission via AJAX
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+            fetch('{% url "signin" %}', {
+                method: 'POST',
+                body: new FormData(this),
+                headers: {
+                    'X-CSRFToken': this.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert('Invalid credentials. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        // ==============================
+        // LOGOUT CONFIRMATION SCRIPT
+        // ==============================
+        // Intercept the logout form submission to display the confirmation modal
+        document.getElementById("logoutForm").addEventListener("submit", function(e) {
+            e.preventDefault(); // Prevent default submission
+            document.getElementById("logoutConfirmationModal").style.display = "block"; // Show the modal
+        });
+
+        // Hide the logout modal when "Cancel" is clicked
+        document.getElementById("cancelLogout").addEventListener("click", function() {
+            document.getElementById("logoutConfirmationModal").style.display = "none";
+        });
+
+        // When "Yes, Logout" is clicked, send an AJAX POST to log out
+        document.getElementById("confirmLogout").addEventListener("click", function() {
+            const form = document.getElementById("logoutForm");
+            const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
+            fetch(form.action, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": csrfToken
+                },
+                body: new URLSearchParams(new FormData(form))
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert("An error occurred during logout.");
+                }
+            })
+            .catch(error => {
+                console.error("Error during logout:", error);
+                alert("An error occurred while processing the logout request.");
+            });
+        });
+    </script>
+</body>
+</html>

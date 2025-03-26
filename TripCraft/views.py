@@ -75,10 +75,10 @@ def user_login(request):
                 # [[[Replace HttpResponse with a redirect to the dashboard once it's linked (Atheen)]]]
                 # Admin login
                 if user.is_staff:
-                    return HttpResponse("Admin logged in") 
-                # User login
+                    return redirect('analytics')
+                    # User login - redirect to user dashboard (or home for now)
                 else:
-                    return HttpResponse("User logged in")
+                    return redirect('home')  # Change this to user dashboard when available
                 
             # If incorrect, show an error message
             else:

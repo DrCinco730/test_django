@@ -323,3 +323,247 @@ table th {
 table tr:nth-child(odd) {
     background-color: #afe1f1;
 }
+
+/* Filter input styling */
+.filter-input {
+    margin-right: 20px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    background-color: white;
+    outline: none;
+    transition: all 0.3s;
+    position: absolute;
+    right: 130px;
+    top: 20px;
+}
+
+.filter-input:focus {
+    border-color: #49AAF4;
+    box-shadow: 0 0 5px rgba(73, 170, 244, 0.5);
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    overflow: auto;
+}
+
+.modal-content {
+    background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    margin: 10% auto;
+    padding: 20px;
+    width: 50%;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    color: #333;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.modal h2 {
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.modal form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal label {
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.modal input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.modal button {
+    background-color: #5a8f9c;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.modal button:hover {
+    background-color: #49AAF4;
+}
+
+.hidden-form {
+    display: none;
+}
+/* Filter input styling */
+.filter-input {
+    margin-right: 20px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    background-color: white;
+    outline: none;
+    transition: all 0.3s;
+    width: 250px;
+}
+
+.filter-input:focus {
+    border-color: #49AAF4;
+    box-shadow: 0 0 5px rgba(73, 170, 244, 0.5);
+}
+
+.filter-select {
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    background-color: white;
+    outline: none;
+    margin-right: 10px;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    overflow: auto;
+}
+
+.modal-content {
+    background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    margin: 10% auto;
+    padding: 20px;
+    width: 50%;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    color: #333;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.modal h2 {
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.modal form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal label {
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.modal input, .modal select {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.modal button {
+    background-color: #5a8f9c;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.modal button:hover {
+    background-color: #49AAF4;
+}
+
+.hidden-form {
+    display: none;
+}
+
+/* Message notifications */
+.messages {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 300px;
+}
+
+.message {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    animation: fadeIn 0.5s, fadeOut 0.5s 5s forwards;
+}
+
+.message.success {
+    background-color: rgba(76, 175, 80, 0.9);
+    color: white;
+}
+
+.message.error {
+    background-color: rgba(244, 67, 54, 0.9);
+    color: white;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}

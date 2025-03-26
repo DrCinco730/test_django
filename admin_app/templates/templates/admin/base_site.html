@@ -1,0 +1,97 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* Modern, clean style for the admin interface */
+    .dashboard-title {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 24px;
+    }
+    
+    .module {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+    
+    .module h2 {
+        background: #0088cc;
+        color: white;
+        padding: 15px;
+        margin: 0;
+    }
+    
+    .module table {
+        width: 100%;
+    }
+    
+    .module tr {
+        border-bottom: 1px solid #eee;
+    }
+    
+    .module th,
+    .module td {
+        padding: 12px 15px;
+    }
+    
+    /* Style for Add and Change links */
+    .addlink, .changelink {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 4px;
+        text-decoration: none;
+        margin: 0 5px;
+    }
+    
+    .addlink {
+        background: #28a745;
+        color: white;
+    }
+    
+    .changelink {
+        background: #17a2b8;
+        color: white;
+    }
+    
+    .addlink:hover, .changelink:hover {
+        opacity: 0.9;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-title">
+    Welcome to Travel Management System
+</div>
+
+{% for app in app_list %}
+<div class="module">
+    <h2>{{ app.name }}</h2>
+    <table>
+        {% for model in app.models %}
+        <tr>
+            <td>
+                {{ model.name }}
+            </td>
+            <td>
+                {% if model.add_url %}
+                <a href="{{ model.add_url }}" class="addlink">Add</a>
+                {% endif %}
+                {% if model.admin_url %}
+                <a href="{{ model.admin_url }}" class="changelink">Change</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endfor %}
+{% endblock %}

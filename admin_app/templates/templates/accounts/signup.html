@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register in TripCraft</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body dir="ltr">
+    <div class="container">
+        <div class="form-box">
+            <h2>Create Your Account</h2>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-field">
+                        {% if field.name != 'gender' and field.name != 'terms_accepted' %}
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.help_text %}
+                                <span class="helptext">{{ field.help_text }}</span>
+                            {% endif %}
+                            {% if field.errors %}
+                                <ul class="errorlist">
+                                    {% for error in field.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% elif field.name == 'gender' %}
+                            <div class="gender">
+                                {{ field.label_tag }}
+                                {{ field }}
+                            </div>
+                        {% elif field.name == 'terms_accepted' %}
+                            <div class="checkbox-container">
+                                {{ field }}
+                                {{ field.label_tag }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit">Create Account</button>
+                <div class="additional-links">
+                    <p>Already have an account? <a href="{% url 'signin' %}">Sign In</a></p>
+                    <p><a href="{% url 'home' %}">Return to Home</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

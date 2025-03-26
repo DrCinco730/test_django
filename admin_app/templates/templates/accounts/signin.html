@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to TripCraft</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="form-box">
+            <h2>Login Page</h2>
+            <form method="post">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Username or Email" dir="ltr">
+                <input type="password" name="password" placeholder="Password" dir="ltr">
+                <div class="buttons">
+                    <button type="submit" class="btn">Login</button>
+                </div>
+                <a href="{% url 'password_reset' %}">forget password</a>
+                <div class="signup"> I don't have an account
+                    <a href="{% url 'signup' %}">Sign Up</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

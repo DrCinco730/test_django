@@ -13,8 +13,8 @@
       <section class="glass">
         <nav class="navbar">
           <div class="user">
-            <img class="ava" src="{% static 'images/icons/0-UserPic.png' %}" width="150"alt=""/>
-            <h3>User Name</h3>
+            <img class="ava" src="{% static 'images/icons/0-UserPic.png' %}" width="150" alt=""/>
+            <h3>{{ request.user.username }}</h3>
           </div>
           <div class="links">
             <a href=""><div class="link">
@@ -35,13 +35,13 @@
               </div>
             </a>
             <a href="/admin_app/analytics"><div class="link">
-                <img class="icons" src="{% static 'images/icons/analytics.png' %}" height="50" alt="Fav"/>
+                <img class="icons" src="{% static 'images/icons/analytics.png' %}" height="50" alt="Analytics"/>
                 <h2>Analytics</h2>
               </div>
               </a>
             <a href="/admin_app/monitor">
               <div class="link">
-                <img class="icons" src="{% static 'images/icons/users.png' %}" height="50" alt="Map"/>
+                <img class="icons" src="{% static 'images/icons/users.png' %}" height="50" alt="Monitor"/>
                 <h2>Monitor Users</h2>
               </div>
               </a>
@@ -79,22 +79,22 @@
             </div>
             <div class="db4" id="boxes">
               <div class="stat-box">
-                Highest Active Users<span>0000</span>
+                Highest Active Users<span>{{ highest_active_users }}</span>
               </div>
               <div class="stat-box">
-                Total Accounts<span>0000</span>
+                Total Accounts<span>{{ total_accounts }}</span>
               </div>
               <div class="stat-box">
-                Most Used Feature<span>Map</span>
+                Most Used Feature<span>{{ most_used_feature }}</span>
               </div>
               <div class="stat-box">
-                Total Itineraries<span>0000</span>
+                Total Itineraries<span>{{ total_itineraries }}</span>
               </div>
               <div class="stat-box">
-                Avg Itineraries/User<span>0000</span>
+                Avg Itineraries/User<span>{{ avg_itineraries_per_user }}</span>
               </div>
               <div class="stat-box">
-                Avg Journey Duration<span>00 Days</span>
+                Avg Journey Duration<span>{{ avg_journey_duration }} Days</span>
               </div>
             </div>
           </div>
@@ -106,15 +106,13 @@
     <script>
       const activity_dates = {{ activity_dates | safe }};
       const activity_counts = {{ activity_counts | safe }};
-      /**
       const feature_name = {{ feature_name | safe }};
       const feature_usage = {{ feature_usage | safe }};
-      const female_count = {{ female_count | safe }};
-      const male_count = {{ male_count | safe }};
-      const follow_count = {{ follow_count | safe }};
-      const comment_count = {{ comment_count | safe }};
-      const like_count = {{ like_count | safe }};
-      */
+      const female_count = {{ female_count }};
+      const male_count = {{ male_count }};
+      const follow_count = {{ follow_count }};
+      const comment_count = {{ comment_count }};
+      const like_count = {{ like_count }};
     </script>
     <script src="{% static 'js/analytics.js' %}"></script>
   </body>

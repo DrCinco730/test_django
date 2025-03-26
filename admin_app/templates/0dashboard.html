@@ -1,0 +1,336 @@
+{% extends "base_admin.html" %}
+{% load static %}
+
+{% block title %}Dashboard | TripCraft Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Dashboard Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <div>
+            <a href="{% url 'reports' %}" class="btn btn-primary">
+                <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+            </a>
+        </div>
+    </div>
+    
+    <!-- Stats Cards Row -->
+    <div class="row mb-4">
+        <!-- Users Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card dashboard-card h-100 py-2 bg-gradient-primary">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Total Users</div>
+                            <div class="dashboard-stat mb-0">{{ total_users }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a href="{% url 'user_list' %}" class="text-white small stretched-link">View Details</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Travelers Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card dashboard-card h-100 py-2 bg-gradient-success">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Active Travelers</div>
+                            <div class="dashboard-stat mb-0">{{ active_travelers }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-hiking fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a href="{% url 'traveler_list' %}" class="text-white small stretched-link">View Details</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Trips Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card dashboard-card h-100 py-2 bg-gradient-info">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Total Trips</div>
+                            <div class="dashboard-stat mb-0">{{ total_trips }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-plane fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <span class="text-white small">Created Last Month: {{ new_trips }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tickets Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card dashboard-card h-100 py-2 bg-gradient-warning">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Open Tickets</div>
+                            <div class="dashboard-stat mb-0">{{ open_tickets }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-headset fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a href="{% url 'support_ticket_list' %}" class="text-white small stretched-link">View Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Recent Activity Column -->
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Activity</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                            <div class="dropdown-header">Filter By:</div>
+                            <a class="dropdown-item" href="#">User Activity</a>
+                            <a class="dropdown-item" href="#">Trip Activity</a>
+                            <a class="dropdown-item" href="#">System Activity</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">View All</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="activity-timeline">
+                        {% for activity in recent_activities %}
+                        <div class="activity-item d-flex mb-3">
+                            <div class="activity-icon me-3 bg-{{ activity.type }}">
+                                <i class="fas fa-{{ activity.icon }} text-white"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="d-flex justify-content-between">
+                                    <h6>{{ activity.title }}</h6>
+                                    <small class="text-muted">{{ activity.timestamp|date:"M d, H:i" }}</small>
+                                </div>
+                                <p class="mb-0">{{ activity.description }}</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-info-circle fa-2x text-info mb-3"></i>
+                            <p>No recent activity to display</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Statistics Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Content Statistics</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Points of Interest</th>
+                                    <th>Trips</th>
+                                    <th>Reviews</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for category in categories_stats %}
+                                <tr>
+                                    <td>{{ category.name }}</td>
+                                    <td>{{ category.poi_count }}</td>
+                                    <td>{{ category.trip_count }}</td>
+                                    <td>{{ category.review_count }}</td>
+                                    <td>
+                                        <span class="badge {% if category.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                            {% if category.is_active %}Active{% else %}Inactive{% endif %}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No categories found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Column -->
+        <div class="col-lg-4">
+            <!-- Recent Tickets -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Support Tickets</h6>
+                </div>
+                <div class="card-body">
+                    <div class="recent-tickets">
+                        {% for ticket in recent_tickets %}
+                        <div class="ticket-item p-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="mb-0">Ticket #{{ ticket.id }}</h6>
+                                <span class="badge bg-{{ ticket.status_class }}">{{ ticket.status }}</span>
+                            </div>
+                            <p class="mb-2">{{ ticket.subject|truncatechars:50 }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">{{ ticket.created_at|date:"M d, H:i" }}</small>
+                                <a href="{% url 'support_ticket_detail' ticket.id %}" class="btn btn-sm btn-outline-primary">View</a>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-ticket-alt fa-2x text-info mb-3"></i>
+                            <p>No recent tickets to display</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'support_ticket_list' %}" class="btn btn-block btn-light">View All Tickets</a>
+                </div>
+            </div>
+            
+            <!-- New Users Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">New Users</h6>
+                    <span class="badge bg-primary">Last 7 days</span>
+                </div>
+                <div class="card-body">
+                    <div class="new-users-list">
+                        {% for user in new_users %}
+                        <div class="user-item d-flex align-items-center p-2 border-bottom">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; flex-shrink: 0;">
+                                {{ user.username|slice:":1"|upper }}
+                            </div>
+                            <div>
+                                <h6 class="mb-0">{{ user.username }}</h6>
+                                <small class="text-muted">{{ user.date_joined|date:"M d, Y" }}</small>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-user-plus fa-2x text-info mb-3"></i>
+                            <p>No new users to display</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'user_list' %}" class="btn btn-block btn-light">View All Users</a>
+                </div>
+            </div>
+            
+            <!-- System Status Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">System Status</h6>
+                </div>
+                <div class="card-body">
+                    <div class="system-status">
+                        <div class="status-item d-flex justify-content-between mb-3">
+                            <span>Database</span>
+                            <span class="text-success"><i class="fas fa-check-circle"></i> Operational</span>
+                        </div>
+                        <div class="status-item d-flex justify-content-between mb-3">
+                            <span>Storage</span>
+                            <span class="text-success"><i class="fas fa-check-circle"></i> Operational</span>
+                        </div>
+                        <div class="status-item d-flex justify-content-between mb-3">
+                            <span>Email Service</span>
+                            <span class="text-success"><i class="fas fa-check-circle"></i> Operational</span>
+                        </div>
+                        <div class="status-item d-flex justify-content-between mb-3">
+                            <span>Map Service</span>
+                            <span class="text-success"><i class="fas fa-check-circle"></i> Operational</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Disk Usage</span>
+                                <span>{{ disk_usage }}%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar {{ disk_usage_class }}" role="progressbar" style="width: {{ disk_usage }}%" aria-valuenow="{{ disk_usage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .activity-timeline {
+        position: relative;
+    }
+    
+    .activity-item {
+        position: relative;
+    }
+    
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    
+    .bg-user {
+        background-color: #4e73df;
+    }
+    
+    .bg-trip {
+        background-color: #1cc88a;
+    }
+    
+    .bg-system {
+        background-color: #36b9cc;
+    }
+    
+    .bg-ticket {
+        background-color: #f6c23e;
+    }
+    
+    .ticket-item:last-child {
+        border-bottom: none !important;
+    }
+    
+    .user-item:last-child {
+        border-bottom: none !important;
+    }
+</style>
+{% endblock %}

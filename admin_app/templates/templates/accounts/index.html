@@ -1,0 +1,68 @@
+<!-- templates/accounts/index.html -->
+{% extends 'accounts/header.html' %}
+{% load static %}
+
+{% block title %}Welcome to TripCraft{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="welcome-container">
+        <h1>Welcome to TripCraft</h1>
+        <h4>Craft your journey.</h4>
+        <img src="{% static 'images/logo.jpg' %}" alt="TripCraft Logo" class="logo">
+        <br /><br />
+        {% if user.is_authenticated %}
+                                <span class="welcome-text">Welcome, {{ user.username }}!</span>
+
+        <div class="buttons">
+
+
+
+            <form class="logout-form">
+                            <button type="submit" id="sub" class="nav-btn logout-btn">Logout</button>
+</form>
+            <style>
+                /* Modal container, hidden by default */
+                .modal {
+                    display: none; /* Hidden initially */
+                    position: fixed; /* Fixed positioning */
+                    z-index: 1000; /* On top of other content */
+                    left: 0;
+                    top: 0;
+                    width: 100%; /* Full width */
+                    height: 100%; /* Full height */
+                    overflow: auto; /* Enable scroll if needed */
+                    background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+                }
+                /* Modal content style */
+                .modal-content {
+                    background-color: #fefefe;
+                    margin: 15% auto; /* Center the modal */
+                    padding: 20px;
+                    border: 1px solid #888;
+                    width: 300px; /* Set a fixed width */
+                    text-align: center;
+                }
+            </style>
+
+<!-- JavaScript for AJAX logout with confirmation modal (without calling response.json()) -->
+<script>
+
+    // Hide the logout modal when "Cancel" is clicked
+    document.getElementById("sub").addEventListener("click", function() {
+            document.getElementById("logoutConfirmationModal").style.display = "block"; // Show the modal
+    });
+
+
+</script>
+
+        </div>
+        {% else %}
+        <div class="buttons">
+            <a href="#" class="nav-btn" onclick="document.getElementById('loginModal').style.display='block'">Login</a>
+            <a href="{% url 'signup' %}" class="nav-btn signup-btn">Sign Up</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

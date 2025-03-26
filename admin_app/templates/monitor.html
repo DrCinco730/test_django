@@ -7,6 +7,10 @@
     <title>Monitor Users</title>
     <link rel="stylesheet" href="{% static 'css/adminNav.css' %}" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Include SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
     <main>
@@ -19,11 +23,11 @@
               width="150"
               alt=""
             />
-            <h3>User Name</h3>
+            <h3>{{ request.user.username }}</h3>
           </div>
           <div class="links">
-            <a href=""
-              ><div class="link">
+            <a href="">
+              <div class="link">
                 <img
                   class="icons"
                   src="{% static 'images/icons/1-Profile.png' %}"
@@ -54,13 +58,13 @@
                 <h2>------</h2>
               </div>
             </a>
-            <a href="/admin_app/analytics"
-              ><div class="link">
+            <a href="/admin_app/analytics">
+              <div class="link">
                 <img
                   class="icons"
                   src="{% static 'images/icons/analytics.png' %}"
                   height="50"
-                  alt="Fav"
+                  alt="Analytics"
                 />
                 <h2>Analytics</h2>
               </div>
@@ -71,7 +75,7 @@
                   class="icons"
                   src="{% static 'images/icons/users.png' %}"
                   height="50"
-                  alt="Map"
+                  alt="Monitor Users"
                 />
                 <h2>Monitor Users</h2>
               </div>
@@ -84,7 +88,7 @@
                   class="icons"
                   src="{% static 'images/icons/9-settings.png' %}"
                   height="50"
-                  alt="settings"
+                  alt="Settings"
                 />
                 <h2>Settings</h2>
               </div>
@@ -103,13 +107,21 @@
             </form>
           </div>
         </nav>
-        <!-- here is the rest of the DB -->
+        <!-- Dashboard section -->
         <div class="dashbord">
           <div class="dash1">
             <div class="db1">
               <div class="header">
                 <h1>Users Table</h1>
-                <button>Filter</button>
+                <!-- Filter options -->
+                <div class="filter-options" style="display: none">
+                  <select id="staff-filter" class="filter-select">
+                    <option value="all">All Users</option>
+                    <option value="staff">Staff Only</option>
+                    <option value="regular">Regular Users Only</option>
+                  </select>
+                </div>
+                <button id="filter-button">Filter</button>
               </div>
               <div id="table">
                 <table>
@@ -120,78 +132,18 @@
                       <th>Staff Status</th>
                     </tr>
                   </thead>
-
                   <tbody>
-                    <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
+                    {% for user in users %}
+                    <tr onclick="window.location.href='?user_id={{ user.id }}'" data-is-staff="{% if user.is_staff %}true{% else %}false{% endif %}">
+                      <td>{{ user.username }}</td>
+                      <td>{{ user.email }}</td>
+                      <td>{% if user.is_staff %}✓{% else %}✗{% endif %}</td>
                     </tr>
+                    {% empty %}
                     <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
+                      <td colspan="3">No users found.</td>
                     </tr>
-                    <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
-                    </tr>
-                    <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
-                    </tr>
-                    <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
-                    </tr>
-                    <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
-                    </tr>
-                    <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
-                    </tr>
-                    <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
-                    </tr>
-                    <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
-                    </tr>
-                    <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
-                    </tr>
-                    <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
-                    </tr>
-                    <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
-                    </tr>
-                    <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
-                    </tr>
-                    <tr>
-                      <td>placeholder</td>
-                      <td>placeholder@gmail.com</td>
-                      <td>X</td>
-                    </tr>
+                    {% endfor %}
                   </tbody>
                 </table>
               </div>
@@ -201,7 +153,18 @@
             <div class="db3" id="general">
               <div id="top">
                 <h1>General User Details</h1>
-                <p id="status">Account status: Active</p>
+                <p id="status">
+                  Account status:
+                  {% if selected_user %}
+                    {% if selected_user.is_active %}
+                      <span style="color: green;">Active</span>
+                    {% else %}
+                      <span style="color: red;">Disabled</span>
+                    {% endif %}
+                  {% else %}
+                    -
+                  {% endif %}
+                </p>
               </div>
               <div id="mid">
                 <img
@@ -211,55 +174,82 @@
                   alt=""
                 />
                 <div id="general_details">
-                  <p>Name: placeholder</p>
-                  <p>Email: placeholder@gmail.com</p>
-                  <p>Staff Status: X</p>
+                  {% if selected_user %}
+                  <p>Name: {{ selected_user.username }}</p>
+                  <p>Email: {{ selected_user.email }}</p>
+                  <p>Staff Status: {% if selected_user.is_staff %}Yes{% else %}No{% endif %}</p>
+                  {% else %}
+                  <p>No user selected.</p>
+                  {% endif %}
                 </div>
               </div>
               <div id="bottom">
-                <button>Edit account details</button>
-                <button>Reset password</button>
-                <button>Disable account</button>
-                <button>Delete account</button>
+                <button id="edit-button">Edit account details</button>
+                <button id="reset-password-button">Reset password</button>
+                <button id="toggle-status-button">
+                  {% if selected_user and not selected_user.is_active %}
+                    Enable account
+                  {% else %}
+                    Disable account
+                  {% endif %}
+                </button>
+                <button id="delete-button">Delete account</button>
               </div>
             </div>
             <div class="db4" id="table">
-              <table >
+              <table>
                 <thead>
                   <tr>
                     <th colspan="2">User Specific Details</th>
                   </tr>
                 </thead>
-
                 <tbody>
+                  {% if selected_user %}
                   <tr>
                     <td>Creation date</td>
-                    <td>00/00/0000</td>
+                    <td>{{ selected_user.date_joined|date:"d/m/Y" }}</td>
                   </tr>
                   <tr>
                     <td>Last active</td>
-                    <td>00/00/0000</td>
+                    <td>{{ last_activity|date:"d/m/Y H:i" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Gender</td>
+                    <td>
+                      {% if selected_user.userprofile.gender == 'M' %}
+                        Male
+                      {% elif selected_user.userprofile.gender == 'F' %}
+                        Female
+                      {% else %}
+                        Not specified
+                      {% endif %}
+                    </td>
                   </tr>
                   <tr>
                     <td>Itineraries</td>
-                    <td>0000</td>
+                    <td>0</td>
                   </tr>
                   <tr>
                     <td>Following</td>
-                    <td>0000</td>
+                    <td>0</td>
                   </tr>
                   <tr>
                     <td>Followers</td>
-                    <td>0000</td>
+                    <td>0</td>
                   </tr>
                   <tr>
                     <td>Comments</td>
-                    <td>0000</td>
+                    <td>0</td>
                   </tr>
                   <tr>
                     <td>Likes</td>
-                    <td>0000</td>
+                    <td>0</td>
                   </tr>
+                  {% else %}
+                  <tr>
+                    <td colspan="2">No user selected</td>
+                  </tr>
+                  {% endif %}
                 </tbody>
               </table>
             </div>
@@ -269,5 +259,70 @@
     </main>
     <div class="circle1"></div>
     <div class="circle2"></div>
+
+    <!-- Hidden forms for user actions -->
+    <form id="disable-form" class="hidden-form" action="/admin_app/toggle-status/" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="user_id" value="">
+      <input type="hidden" name="action" value="toggle">
+    </form>
+
+    <form id="delete-form" class="hidden-form" action="/admin_app/delete-user/" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="user_id" value="">
+    </form>
+
+    <!-- Edit User Modal -->
+    <div id="edit-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit User Details</h2>
+        <form action="/admin_app/edit-user/" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="user_id" value="">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
+          <label for="is_staff">Staff Status:</label>
+          <select id="is_staff" name="is_staff">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+          <button type="submit">Save Changes</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div id="reset-password-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Reset User Password</h2>
+        <form action="/admin_app/reset-password/" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="user_id" value="">
+          <label for="new_password">New Password:</label>
+          <input type="password" id="new_password" name="new_password" required>
+          <label for="confirm_password">Confirm Password:</label>
+          <input type="password" id="confirm_password" name="confirm_password" required>
+          <button type="submit">Reset Password</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Display messages from the backend -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Include the JS file for user interactions -->
+    <script src="{% static 'js/monitor.js' %}"></script>
   </body>
 </html>

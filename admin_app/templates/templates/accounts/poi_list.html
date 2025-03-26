@@ -1,0 +1,122 @@
+{% extends "templates/accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Manage Points of Interest</h2>
+        <a href="{% url 'poi_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Point of Interest
+        </a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Location</th>
+                            <th>Trip Count</th>
+                            <th>Added Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for poi in pois %}
+                        <tr>
+                            <td>
+                                {% if poi.image %}
+                                    <img src="{{ poi.image.url }}" alt="{{ poi.name }}" class="poi-image">
+                                {% else %}
+                                    <i class="fas fa-map-marker-alt"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ poi.name }}</td>
+                            <td>{{ poi.category.name }}</td>
+                            <td>{{ poi.location }}</td>
+                            <td>{{ poi.trips.count }}</td>
+                            <td>{{ poi.created_at|date:"Y-m-d" }}</td>
+                            <td>
+                                <a href="{% url 'poi_edit' poi.pk %}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <button type="button" class="btn btn-sm btn-info" 
+                                        onclick="showOnMap({{ poi.latitude }}, {{ poi.longitude }})">
+                                    <i class="fas fa-map"></i> Show on Map
+                                </button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No points of interest found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Map Modal -->
+<div class="modal fade" id="mapModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Point of Interest Location</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="map" style="height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .poi-image {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+</style>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<script>
+    let map;
+    function showOnMap(lat, lng) {
+        const modal = new bootstrap.Modal(document.getElementById('mapModal'));
+        modal.show();
+        
+        setTimeout(() => {
+            if (!map) {
+                map = L.map('map');
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+            }
+            
+            map.setView([lat, lng], 13);
+            L.marker([lat, lng]).addTo(map);
+            map.invalidateSize();
+        }, 400);
+    }
+</script>
+{% endblock %}
